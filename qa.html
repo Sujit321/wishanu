@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#fff7f1" />
+  <meta name="description" content="A little universe of love, wrapped up just for you. Happy birthday, my love." />
+  <title>Happy Birthday, My Love</title>
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23e889a9'/%3E%3Cstop offset='1' stop-color='%23c9a24b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%23fff7f1'/%3E%3Cpath d='M32 51s-16-9.6-16-21a9 9 0 0 1 16-5.6A9 9 0 0 1 48 30c0 11.4-16 21-16 21Z' fill='url(%23g)'/%3E%3C/svg%3E" />
+
+  <!-- Local font files keep the experience beautiful even without internet -->
+  <link rel="preload" href="vendor/fonts/PlayfairDisplay-normal-400-900.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="vendor/fonts/DancingScript-normal-400-700.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="vendor/fonts/fonts.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/scenes.css" />
+  <link rel="stylesheet" href="css/finale.css" />
+</head>
+
+<body>
+  <a class="skip-link" href="#cake">Skip to the celebration</a>
+
+  <!-- ══════════════════════════════════════════════════════════
+       PRELOADER — a soft, short curtain while fonts and photos settle
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader__inner">
+      <div class="preloader__monogram"><span>M</span><i data-lucide="heart"></i></div>
+      <p class="preloader__script">a little something for you</p>
+      <div class="preloader__line"><span id="preloaderBar"></span></div>
+      <p class="preloader__date">27 · 11 · 2026</p>
+    </div>
+  </div>
+
+  <!-- Transition veil used when the surprise is opened -->
+  <div class="veil" id="veil" aria-hidden="true">
+    <div class="veil__glow"></div>
+    <div class="veil__content">
+      <span class="veil__star">✦</span>
+      <p class="veil__script">for you, always</p>
+      <p class="veil__line">Happy Birthday, <span data-name>My Love</span></p>
+    </div>
+  </div>
+
+  <!-- Background + effects canvases -->
+  <canvas id="ambient" class="ambient" aria-hidden="true"></canvas>
+  <canvas id="fx" class="fx" aria-hidden="true"></canvas>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+  <div class="floaties" id="floaties" aria-hidden="true"></div>
+
+  <!-- Scroll progress -->
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       NAVIGATION
+  ═══════════════════════════════════════════════════════════ -->
+  <header class="site-nav" id="siteNav">
+    <a class="brand" href="#hero" aria-label="Back to the beginning">
+      <span class="brand__monogram">M</span>
+      <span class="brand__text">for <span data-name>My Love</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Chapters">
+      <a href="#cake" data-nav="cake">The Cake</a>
+      <a href="#memories" data-nav="memories">Memories</a>
+      <a href="#letter" data-nav="letter">The Letter</a>
+      <a href="#gift" data-nav="gift">The Gift</a>
+      <a href="#fireworks" data-nav="fireworks">Fireworks</a>
+      <a href="#wish" data-nav="wish">The Wish</a>
+    </nav>
+
+    <button class="sound-btn" id="soundBtn" type="button" aria-pressed="false" aria-label="Turn the music on" title="Music">
+      <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="sound-icon sound-icon--on" aria-hidden="true"><i data-lucide="music-2"></i></span>
+      <span class="sound-icon sound-icon--off" aria-hidden="true"><i data-lucide="volume-x"></i></span>
+    </button>
+  </header>
+
+  <!-- Mobile chapter dock -->
+  <nav class="dock" id="dock" aria-label="Chapters">
+    <a href="#hero" data-dock="hero" aria-label="Beginning"><i data-lucide="sparkles"></i><span>Start</span></a>
+    <a href="#cake" data-dock="cake" aria-label="The cake"><i data-lucide="cake"></i><span>Cake</span></a>
+    <a href="#memories" data-dock="memories" aria-label="Memories"><i data-lucide="images"></i><span>Memories</span></a>
+    <a href="#letter" data-dock="letter" aria-label="The letter"><i data-lucide="mail-open"></i><span>Letter</span></a>
+    <a href="#gift" data-dock="gift" aria-label="The gift"><i data-lucide="gift"></i><span>Gift</span></a>
+    <a href="#fireworks" data-dock="fireworks" aria-label="The fireworks"><i data-lucide="flame"></i><span>Sparks</span></a>
+    <a href="#wish" data-dock="wish" aria-label="The wish"><i data-lucide="star"></i><span>Wish</span></a>
+  </nav>
+
+  <main>
+    <!-- ════════════════════════════════════════════════════════
+         01 · OPENING
+    ═════════════════════════════════════════════════════════ -->
+    <section class="hero" id="hero">
+      <div class="hero-ornaments" aria-hidden="true">
+        <span class="orb orb--1"></span>
+        <span class="orb orb--2"></span>
+        <span class="orb orb--3"></span>
+        <span class="petal petal--1"></span>
+        <span class="petal petal--2"></span>
+        <span class="petal petal--3"></span>
+        <span class="petal petal--4"></span>
+        <span class="petal petal--5"></span>
+        <span class="petal petal--6"></span>
+        <span class="twinkle twinkle--1">✦</span>
+        <span class="twinkle twinkle--2">✦</span>
+        <span class="twinkle twinkle--3">✦</span>
+
+        <svg class="floral floral--left" viewBox="0 0 240 340" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+          <path d="M24 334C72 282 48 232 88 190c32-34 32-82 18-128" />
+          <path d="M68 264c26-10 46-2 60 20" />
+          <path d="M82 226c-28-8-48 0-62 20" />
+          <path d="M92 178c28-10 48-2 62 20" />
+          <path d="M102 128c-28-8-48 0-62 20" />
+          <path d="M106 78c26-10 46-2 60 20" />
+          <path d="M68 264c6-22 22-32 40-30-4 22-20 34-40 30Z" fill="rgba(246,184,205,.18)" />
+          <path d="M82 226c-2-22 10-38 28-42 2 22-10 38-28 42Z" fill="rgba(201,162,75,.12)" />
+          <path d="M92 178c6-22 22-32 40-30-4 22-20 34-40 30Z" fill="rgba(246,184,205,.18)" />
+          <path d="M102 128c-2-22 10-38 28-42 2 22-10 38-28 42Z" fill="rgba(201,162,75,.12)" />
+          <g transform="translate(106 62)">
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.35)" />
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.3)" transform="rotate(72)" />
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.3)" transform="rotate(144)" />
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.3)" transform="rotate(216)" />
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.3)" transform="rotate(288)" />
+            <circle r="5" fill="rgba(201,162,75,.55)" stroke="none" />
+          </g>
+          <g transform="translate(150 210) scale(.62)">
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.35)" />
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.3)" transform="rotate(72)" />
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.3)" transform="rotate(144)" />
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.3)" transform="rotate(216)" />
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.3)" transform="rotate(288)" />
+            <circle r="5" fill="rgba(201,162,75,.55)" stroke="none" />
+          </g>
+        </svg>
+
+        <svg class="floral floral--right" viewBox="0 0 240 340" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+          <path d="M24 334C72 282 48 232 88 190c32-34 32-82 18-128" />
+          <path d="M68 264c26-10 46-2 60 20" />
+          <path d="M82 226c-28-8-48 0-62 20" />
+          <path d="M92 178c28-10 48-2 62 20" />
+          <path d="M102 128c-28-8-48 0-62 20" />
+          <path d="M106 78c26-10 46-2 60 20" />
+          <path d="M68 264c6-22 22-32 40-30-4 22-20 34-40 30Z" fill="rgba(246,184,205,.18)" />
+          <path d="M82 226c-2-22 10-38 28-42 2 22-10 38-28 42Z" fill="rgba(201,162,75,.12)" />
+          <path d="M92 178c6-22 22-32 40-30-4 22-20 34-40 30Z" fill="rgba(246,184,205,.18)" />
+          <path d="M102 128c-2-22 10-38 28-42 2 22-10 38-28 42Z" fill="rgba(201,162,75,.12)" />
+          <g transform="translate(106 62)">
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.35)" />
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.3)" transform="rotate(72)" />
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.3)" transform="rotate(144)" />
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.3)" transform="rotate(216)" />
+            <ellipse cx="0" cy="-16" rx="8" ry="16" fill="rgba(255,240,246,.3)" transform="rotate(288)" />
+            <circle r="5" fill="rgba(201,162,75,.55)" stroke="none" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="hero-inner">
+        <p class="hero-eyebrow">
+          <span class="hero-eyebrow__line"></span>
+          <span>27 · 11 · 2026</span>
+          <span class="hero-eyebrow__line"></span>
+        </p>
+
+        <h1 class="hero-title" aria-label="A Special Day for Someone Special">
+          <span class="hero-title__line" aria-hidden="true"><span class="hero-title__word">A</span> <span class="hero-title__word">Special</span> <span class="hero-title__word">Day</span></span>
+          <span class="hero-title__line hero-title__line--two" aria-hidden="true">
+            <span class="hero-title__for">for</span>
+            <span class="hero-title__someone">Someone</span>
+            <span class="hero-title__special">Special</span>
+          </span>
+        </h1>
+
+        <p class="hero-sub">A tiny universe of love, wrapped up just for you.</p>
+
+        <div class="hero-action">
+          <span class="bloom-ring" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </span>
+          <button class="btn btn--glow" id="openBtn" type="button">
+            <span class="btn__shine" aria-hidden="true"></span>
+            <i data-lucide="gift" aria-hidden="true"></i>
+            <span>Open Your Surprise</span>
+          </button>
+        </div>
+
+        <p class="hero-hint"><span class="hero-hint__dot"></span> a little magic is waiting inside</p>
+      </div>
+
+      <div class="hero-foot" aria-hidden="true">
+        <span>made with love</span>
+        <span class="hero-foot__line"></span>
+        <span>for the loveliest person I know</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         02 · BIRTHDAY CELEBRATION
+    ═════════════════════════════════════════════════════════ -->
+    <section class="section celebration" id="cake">
+      <div class="section-bg" aria-hidden="true">
+        <span class="section-bg__glow section-bg__glow--1"></span>
+        <span class="section-bg__glow section-bg__glow--2"></span>
+        <span class="section-bg__watermark">27</span>
+      </div>
+
+      <div class="wrap">
+        <header class="section-head reveal">
+          <span class="eyebrow"><span class="eyebrow__line"></span>Chapter One · The Celebration<span class="eyebrow__line"></span></span>
+          <h2 class="birthday-title">
+            <span class="birthday-title__small">Happy Birthday,</span>
+            <span class="birthday-title__name" data-name>My Love</span>
+          </h2>
+          <p class="section-sub">Today the whole world feels a little brighter — because it is the day you were born.</p>
+        </header>
+
+        <div class="cake-layout">
+          <figure class="portrait-card reveal">
+            <div class="portrait-card__frame">
+              <img src="2.jpg" alt="Her, golden hour in her hair, standing by an old wooden door" loading="lazy" />
+              <span class="portrait-card__glint" aria-hidden="true"></span>
+            </div>
+            <figcaption>my favourite person <span aria-hidden="true">♡</span></figcaption>
+          </figure>
+
+          <div class="cake-stage">
+            <div class="cake-aura" aria-hidden="true"></div>
+            <div class="cake" id="cakeBox" role="button" tabindex="0" aria-label="Blow out the birthday candles">
+              <div class="cake-plate" aria-hidden="true"></div>
+              <div class="cake-stand" aria-hidden="true"></div>
+
+              <div class="cake-tier cake-tier--bottom" aria-hidden="true">
+                <span class="tier-icing"></span>
+                <span class="tier-gold"></span>
+                <span class="tier-pearls"></span>
+                <span class="tier-flower tier-flower--a"></span>
+                <span class="tier-flower tier-flower--b"></span>
+                <span class="tier-leaf tier-leaf--a"></span>
+              </div>
+
+              <div class="cake-tier cake-tier--top" aria-hidden="true">
+                <span class="tier-icing"></span>
+                <span class="tier-gold"></span>
+                <span class="tier-pearls"></span>
+                <span class="tier-flower tier-flower--c"></span>
+                <span class="tier-leaf tier-leaf--b"></span>
+
+                <div class="candles">
+                  <span class="candle"><span class="candle__glow"></span><span class="candle__stick"></span><span class="candle__wick"></span><span class="candle__flame"></span><span class="candle__smoke"></span></span>
+                  <span class="candle"><span class="candle__glow"></span><span class="candle__stick"></span><span class="candle__wick"></span><span class="candle__flame"></span><span class="candle__smoke"></span></span>
+                  <span class="candle"><span class="candle__glow"></span><span class="candle__stick"></span><span class="candle__wick"></span><span class="candle__flame"></span><span class="candle__smoke"></span></span>
+                  <span class="candle"><span class="candle__glow"></span><span class="candle__stick"></span><span class="candle__wick"></span><span class="candle__flame"></span><span class="candle__smoke"></span></span>
+                  <span class="candle"><span class="candle__glow"></span><span class="candle__stick"></span><span class="candle__wick"></span><span class="candle__flame"></span><span class="candle__smoke"></span></span>
+                </div>
+              </div>
+            </div>
+
+            <p class="cake-hint" id="cakeHint">Tap the cake to blow out the candles</p>
+
+            <div class="cake-actions">
+              <button class="btn btn--soft" id="blowBtn" type="button">
+                <i data-lucide="wind" aria-hidden="true"></i> Blow the candles
+              </button>
+              <button class="btn btn--ghost" id="relightBtn" type="button" hidden>
+                <i data-lucide="rotate-ccw" aria-hidden="true"></i> Light them again
+              </button>
+            </div>
+
+            <div class="listening" id="listening" hidden>
+              <span class="listening__text">Now blow gently…</span>
+              <span class="listening__meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+              <button class="listening__cancel" id="listeningCancel" type="button">cancel</button>
+            </div>
+
+            <div class="wish-card" id="wishCard" role="status" aria-live="polite" hidden>
+              <button class="wish-card__close" id="wishCardClose" type="button" aria-label="Close the message"><i data-lucide="x"></i></button>
+              <span class="wish-card__sparkle" aria-hidden="true">✦</span>
+              <p class="wish-card__script">wish made</p>
+              <h3>Your wish is already on its way, my love.</h3>
+              <p>May this year hold every soft, beautiful thing you have been quietly hoping for.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="date-plaque reveal">
+          <span class="date-plaque__icon"><i data-lucide="calendar-days" aria-hidden="true"></i></span>
+          <span class="date-plaque__date">27 November 2026</span>
+          <span class="date-plaque__divider" aria-hidden="true"></span>
+          <span class="date-plaque__count" id="countdownInline">the big day is coming</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         03 · MEMORIES
+    ═════════════════════════════════════════════════════════ -->
+    <section class="section memories" id="memories">
+      <div class="section-bg" aria-hidden="true">
+        <span class="section-bg__glow section-bg__glow--3"></span>
+        <span class="section-bg__watermark section-bg__watermark--script">memories</span>
+      </div>
+
+      <div class="wrap">
+        <header class="section-head section-head--split reveal">
+          <div>
+            <span class="eyebrow"><span class="eyebrow__line"></span>Chapter Two · The Memories</span>
+            <h2 class="section-title">Every moment with you<br /><span class="script">is my favourite.</span></h2>
+          </div>
+          <p class="section-sub section-sub--right">A few frozen seconds I keep coming back to. Drag, scroll, or let the little arrows take you through them.</p>
+        </header>
+      </div>
+
+      <div class="gallery-shell">
+        <div class="gallery" id="gallery" tabindex="0" aria-label="Photo memories, scroll horizontally">
+          <article class="memory-card" data-index="0" data-caption="You in red, and my heart forgetting how to behave." data-note="Some evenings are ordinary. And then you walk in, and the whole room becomes a memory.">
+            <div class="memory-card__frame">
+              <img src="1.jpg" alt="Her in a red silk saree, glowing in warm festive light" loading="lazy" />
+              <span class="memory-card__glint" aria-hidden="true"></span>
+              <span class="memory-card__zoom" aria-hidden="true"><i data-lucide="sparkles"></i></span>
+            </div>
+            <div class="memory-card__caption">
+              <span class="memory-card__no">01</span>
+              <p>You in red, and my heart forgetting how to behave.</p>
+            </div>
+          </article>
+
+          <article class="memory-card" data-index="1" data-caption="The sun took one look at you and decided to stay." data-note="That afternoon light had one job, and it did it beautifully.">
+            <div class="memory-card__frame">
+              <img src="2.jpg" alt="Sunlight in her hair as she stands beside an old wooden door" loading="lazy" />
+              <span class="memory-card__glint" aria-hidden="true"></span>
+              <span class="memory-card__zoom" aria-hidden="true"><i data-lucide="sparkles"></i></span>
+            </div>
+            <div class="memory-card__caption">
+              <span class="memory-card__no">02</span>
+              <p>The sun took one look at you and decided to stay.</p>
+            </div>
+          </article>
+
+          <article class="memory-card" data-index="2" data-caption="Every colour looks like it was made for you." data-note="You don't just wear a saree. You give it a story.">
+            <div class="memory-card__frame">
+              <img src="3.jpg" alt="Her in a teal floral saree, hand resting in her hair" loading="lazy" />
+              <span class="memory-card__glint" aria-hidden="true"></span>
+              <span class="memory-card__zoom" aria-hidden="true"><i data-lucide="sparkles"></i></span>
+            </div>
+            <div class="memory-card__caption">
+              <span class="memory-card__no">03</span>
+              <p>Every colour looks like it was made for you.</p>
+            </div>
+          </article>
+
+          <article class="memory-card" data-index="3" data-caption="Proof that grace runs in the family." data-note="Some smiles never really age. This one feels like home.">
+            <div class="memory-card__frame memory-card__frame--vintage">
+              <img src="5.jpg" alt="A warm vintage portrait from 1985 of a smiling woman" loading="lazy" />
+              <span class="memory-card__glint" aria-hidden="true"></span>
+              <span class="memory-card__zoom" aria-hidden="true"><i data-lucide="sparkles"></i></span>
+              <span class="memory-card__year">1985</span>
+            </div>
+            <div class="memory-card__caption">
+              <span class="memory-card__no">04</span>
+              <p>Proof that grace runs in the family.</p>
+            </div>
+          </article>
+
+          <article class="memory-card memory-card--quote">
+            <div class="memory-card__frame">
+              <span class="memory-card__quote-mark" aria-hidden="true"><i data-lucide="quote"></i></span>
+              <p class="memory-card__quote">If I had to choose a favourite place in the world, it would be anywhere you're laughing.</p>
+              <span class="memory-card__quote-sign">— every version of me</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="gallery-ui wrap">
+          <div class="gallery-progress" aria-hidden="true"><span id="galleryProgress"></span></div>
+          <div class="gallery-meta">
+            <span class="gallery-count" id="galleryCount">01 <em>/ 05</em></span>
+            <span class="gallery-drag">drag to wander</span>
+            <div class="gallery-buttons">
+              <button class="round-btn" id="galleryPrev" type="button" aria-label="Previous memory"><i data-lucide="chevron-left"></i></button>
+              <button class="round-btn" id="galleryNext" type="button" aria-label="Next memory"><i data-lucide="chevron-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         04 · THE LETTER
+    ═════════════════════════════════════════════════════════ -->
+    <section class="section letter" id="letter">
+      <div class="section-bg" aria-hidden="true">
+        <span class="section-bg__glow section-bg__glow--4"></span>
+      </div>
+
+      <div class="wrap">
+        <header class="section-head reveal">
+          <span class="eyebrow"><span class="eyebrow__line"></span>Chapter Three · The Letter<span class="eyebrow__line"></span></span>
+          <h2 class="section-title">Words I wanted<br /><span class="script">to say out loud.</span></h2>
+        </header>
+
+        <article class="letter-paper" id="letterPaper">
+          <span class="letter-paper__corner letter-paper__corner--tl" aria-hidden="true"></span>
+          <span class="letter-paper__corner letter-paper__corner--tr" aria-hidden="true"></span>
+          <span class="letter-paper__corner letter-paper__corner--bl" aria-hidden="true"></span>
+          <span class="letter-paper__corner letter-paper__corner--br" aria-hidden="true"></span>
+
+          <p class="letter-date">27 · 11 · 2026</p>
+          <h3 class="letter-greeting">My dearest <span data-name>My Love</span>,</h3>
+
+          <div class="letter-body" id="letterBody"></div>
+
+          <div class="letter-sign" id="letterSign">
+            <p class="letter-closing">With all my heart,</p>
+            <p class="letter-signature">always yours</p>
+            <span class="letter-flourish" aria-hidden="true">
+              <svg viewBox="0 0 160 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+                <path d="M4 30c26-22 46 4 68-10 12-8 18-8 28-2 14 8 30 8 56-8" />
+                <path d="M126 10c4 2 8 6 8 10M134 8c-2 6-2 10 0 14" />
+              </svg>
+            </span>
+          </div>
+
+          <button class="letter-skip" id="letterSkip" type="button">reveal the whole letter</button>
+
+          <div class="wax-seal" aria-hidden="true">
+            <span class="wax-seal__ribbon wax-seal__ribbon--l"></span>
+            <span class="wax-seal__ribbon wax-seal__ribbon--r"></span>
+            <span class="wax-seal__disc"><i data-lucide="heart"></i></span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         05 · THE GIFT + COUNTDOWN
+    ═════════════════════════════════════════════════════════ -->
+    <section class="section gift-section" id="gift">
+      <div class="section-bg" aria-hidden="true">
+        <span class="section-bg__glow section-bg__glow--5"></span>
+        <span class="section-bg__glow section-bg__glow--6"></span>
+      </div>
+
+      <div class="wrap">
+        <header class="section-head reveal">
+          <span class="eyebrow"><span class="eyebrow__line"></span>Chapter Four · The Gift<span class="eyebrow__line"></span></span>
+          <h2 class="section-title">One more little thing,<br /><span class="script">just for you.</span></h2>
+          <p class="section-sub">No wrapping paper could hold all of it — but this little box is doing its best.</p>
+        </header>
+
+        <div class="gift-stage reveal" id="giftStage">
+          <div class="gift-aura" aria-hidden="true"></div>
+
+          <button class="gift" id="giftBox" type="button" aria-expanded="false" aria-controls="giftNote">
+            <span class="gift-shadow" aria-hidden="true"></span>
+            <span class="gift-box" aria-hidden="true">
+              <span class="gift-box__side"></span>
+              <span class="gift-box__front"></span>
+              <span class="gift-box__ribbon"></span>
+              <span class="gift-box__shine"></span>
+            </span>
+            <span class="gift-lid" aria-hidden="true">
+              <span class="gift-lid__top"></span>
+              <span class="gift-lid__front"></span>
+              <span class="gift-bow">
+                <span class="bow-loop bow-loop--l"></span>
+                <span class="bow-loop bow-loop--r"></span>
+                <span class="bow-knot"></span>
+                <span class="bow-tail bow-tail--l"></span>
+                <span class="bow-tail bow-tail--r"></span>
+              </span>
+            </span>
+            <span class="gift-tag" aria-hidden="true">For you</span>
+          </button>
+
+          <div class="gift-beam" aria-hidden="true"></div>
+
+          <div class="gift-note" id="giftNote" aria-hidden="true">
+            <button class="gift-note__close" id="giftNoteClose" type="button" aria-label="Close the gift message"><i data-lucide="x"></i></button>
+            <p class="gift-note__script">surprise, my love</p>
+            <h3>Everything I have, in one small box.</h3>
+            <p>This box is small, but it's carrying something enormous — a lifetime of hand-holds, forehead kisses, terrible jokes, slow dances in the kitchen, and every birthday after this one.</p>
+            <p class="gift-note__ps">Happy birthday, my love. You are my favourite wish come true.</p>
+            <span class="gift-note__coupon"><i data-lucide="heart"></i> Redeemable: one hug, anywhere, anytime.</span>
+          </div>
+
+          <p class="gift-hint" id="giftHint">Tap the gift to open it</p>
+        </div>
+
+        <div class="countdown-card reveal" id="countdownCard">
+          <div class="countdown-card__head">
+            <span class="eyebrow eyebrow--tight">The day</span>
+            <p>27 November 2026</p>
+          </div>
+          <div class="countdown" id="countdown" aria-label="Countdown to the birthday">
+            <div class="countdown__unit"><strong id="cdDays">00</strong><span>days</span></div>
+            <span class="countdown__colon" aria-hidden="true">:</span>
+            <div class="countdown__unit"><strong id="cdHours">00</strong><span>hours</span></div>
+            <span class="countdown__colon" aria-hidden="true">:</span>
+            <div class="countdown__unit"><strong id="cdMinutes">00</strong><span>minutes</span></div>
+            <span class="countdown__colon" aria-hidden="true">:</span>
+            <div class="countdown__unit"><strong id="cdSeconds">00</strong><span>seconds</span></div>
+          </div>
+          <p class="countdown__note" id="countdownNote">Until the world celebrates you.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         06 · FIREWORKS — two names in the sky
+    ═════════════════════════════════════════════════════════ -->
+    <section class="section fireworks" id="fireworks">
+      <canvas id="fireworksCanvas" class="fireworks-canvas" aria-hidden="true"></canvas>
+      <div class="fireworks-glow" aria-hidden="true"></div>
+      <div class="fireworks-horizon" aria-hidden="true"></div>
+      <div class="fireworks-aura" aria-hidden="true"></div>
+
+      <div class="wrap fireworks-wrap">
+        <span class="eyebrow eyebrow--light reveal"><span class="eyebrow__line"></span>Chapter Five · The Fireworks<span class="eyebrow__line"></span></span>
+
+        <h2 class="fireworks-title reveal">
+          <span class="fireworks-kicker">a sky full of sparks for</span>
+          <span class="fireworks-names">
+            <span class="fireworks-name" data-her-name>Anu</span>
+            <span class="fireworks-heart" aria-hidden="true">♥</span>
+            <span class="fireworks-name" data-his-name>Sujit</span>
+          </span>
+        </h2>
+
+        <p class="fireworks-sub reveal">Two names, one sky, and every spark saying what I feel.</p>
+
+        <div class="fireworks-action reveal">
+          <button class="btn btn--wish" id="fireworksBtn" type="button">
+            <span class="btn__shine" aria-hidden="true"></span>
+            <i data-lucide="flame" aria-hidden="true"></i>
+            <span id="fireworksBtnLabel">Light up our sky</span>
+          </button>
+        </div>
+
+        <p class="fireworks-note reveal" id="fireworksNote">tap the sky, and watch it celebrate you both</p>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         07 · FINAL WISH
+    ═════════════════════════════════════════════════════════ -->
+    <section class="section final" id="wish">
+      <canvas id="nightCanvas" class="night-canvas" aria-hidden="true"></canvas>
+      <div class="final-moon" aria-hidden="true"></div>
+      <div class="final-glow" aria-hidden="true"></div>
+
+      <div class="wrap final-wrap">
+        <span class="eyebrow eyebrow--light reveal"><span class="eyebrow__line"></span>Chapter Six · The Wish<span class="eyebrow__line"></span></span>
+
+        <h2 class="final-title reveal">
+          <span class="final-title__line">May your dreams</span>
+          <span class="final-title__script">take flight</span>
+          <span class="final-title__line">and your smile never fade.</span>
+        </h2>
+
+        <p class="final-sub reveal">Keep shining, keep smiling, and keep being amazing.</p>
+
+        <div class="final-action reveal">
+          <button class="btn btn--wish" id="wishBtn" type="button">
+            <span class="btn__shine" aria-hidden="true"></span>
+            <i data-lucide="star" aria-hidden="true"></i>
+            <span>Make a Birthday Wish</span>
+          </button>
+          <p class="final-note">No candles this time. Just you, the sky, and one secret.</p>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <span class="footer__heart" aria-hidden="true">♥</span>
+        <p>27 · 11 · 2026 — for <span data-name>My Love</span>, always.</p>
+        <p class="footer__small">made with love, a little moonlight, and every good wish I have</p>
+      </footer>
+    </section>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════════
+       PHOTO LIGHTBOX
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="A memory" aria-hidden="true">
+    <div class="lightbox__backdrop" data-lightbox-close></div>
+    <div class="lightbox__inner">
+      <button class="lightbox__close" type="button" data-lightbox-close aria-label="Close photo"><i data-lucide="x"></i></button>
+      <button class="lightbox__nav lightbox__nav--prev" id="lbPrev" type="button" aria-label="Previous photo"><i data-lucide="chevron-left"></i></button>
+      <figure class="lightbox__figure">
+        <div class="lightbox__image-wrap"><img id="lbImage" src="" alt="" /></div>
+        <figcaption>
+          <p class="lightbox__caption" id="lbCaption"></p>
+          <p class="lightbox__note" id="lbNote"></p>
+          <span class="lightbox__count" id="lbCount"></span>
+        </figcaption>
+      </figure>
+      <button class="lightbox__nav lightbox__nav--next" id="lbNext" type="button" aria-label="Next photo"><i data-lucide="chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       WISH-MAKING EXPERIENCE
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="wish-modal" id="wishModal" role="dialog" aria-modal="true" aria-labelledby="wishTitle" aria-hidden="true">
+    <canvas id="wishCanvas" class="wish-sky" aria-hidden="true"></canvas>
+    <div class="wish-modal__glow" aria-hidden="true"></div>
+
+    <div class="wish-panel">
+      <button class="wish-close" id="wishClose" type="button" aria-label="Close the wish"><i data-lucide="x"></i></button>
+
+      <div class="wish-form-wrap" id="wishFormWrap">
+        <span class="wish-icon" aria-hidden="true"><i data-lucide="sparkles"></i></span>
+        <p class="eyebrow eyebrow--light">A wish for the universe</p>
+        <h2 class="wish-title" id="wishTitle">Close your eyes.<br /><em>Make a wish.</em></h2>
+        <p class="wish-sub">Write it here if you like — or keep it tucked in your heart. The stars are listening either way.</p>
+
+        <form class="wish-form" id="wishForm" novalidate>
+          <label class="sr-only" for="wishInput">Your birthday wish</label>
+          <input class="wish-input" id="wishInput" type="text" maxlength="140" placeholder="I wish for…" autocomplete="off" spellcheck="false" />
+          <button class="btn btn--wish" type="submit">
+            <span class="btn__shine" aria-hidden="true"></span>
+            <i data-lucide="star" aria-hidden="true"></i>
+            <span>Send it to the stars</span>
+          </button>
+        </form>
+
+        <button class="wish-secret" id="wishSecret" type="button">Keep it secret, keep it safe</button>
+        <p class="wish-privacy">Only you and the sky will ever know.</p>
+      </div>
+
+      <div class="wish-success" id="wishSuccess" hidden>
+        <span class="wish-success__star" aria-hidden="true">✦</span>
+        <div class="wish-success__orb" aria-hidden="true"></div>
+        <h2 class="wish-title">Your wish is<br /><em>on its way.</em></h2>
+        <p class="wish-sub">Somewhere in the sky, a star just got a little brighter. Keep believing, my love.</p>
+        <p class="wish-echo" id="wishEcho" hidden></p>
+        <button class="btn btn--ghost btn--light" id="wishDone" type="button">Back to the celebration</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span></div>
+
+  <noscript>
+    <div class="noscript">
+      <p>This little surprise needs JavaScript to come alive. Please enable it and refresh — it's worth it. ♥</p>
+    </div>
+  </noscript>
+
+  <!-- Libraries are stored locally so the surprise works even offline -->
+  <script src="vendor/gsap.min.js"></script>
+  <script src="vendor/ScrollTrigger.min.js"></script>
+  <script src="vendor/lucide.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/interactions.js"></script>
+</body>
+</html>
